@@ -1,0 +1,21 @@
+1. on backend
+   - fix uuid error by downgrading uuid to 8.3.2 from  "uuid": "^14.0.0"
+
+2. add monitoring using prometheus and grafana
+
+3. fix docker-compose.yml by adding ports for prometheus and grafana and volumes
+
+4. fix localhost to host in frontend and nginx configuration  also change axios base url to
+		const axios = Axios.create({
+			baseURL: window.location.origin,
+			headers: {
+				Authorization: `Bearer ${generateHeader()}`
+			}
+		})
+    FROM
+    const axios = Axios.create({
+		baseURL: `http://${window.location.hostname}:3000`,
+		headers: {
+			Authorization: `Bearer ${generateHeader()}`
+		}
+	})

@@ -13,7 +13,7 @@ import Home from './home'
 
 
 const axios = Axios.create({
-  baseURL: `http://${window.location.hostname}:3000`,
+  baseURL: window.location.origin,
   headers: {
     Authorization: `Bearer ${generateHeader()}`
   }
