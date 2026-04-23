@@ -83,27 +83,14 @@ services:
     networks:
       - app_network
 
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
     restart: always
     volumes:
-      - ./monitoring/loki/loki-config.yaml:/etc/loki/local-config.yaml:ro
-      - loki_data:/loki
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - app_network
-
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./monitoring/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-    command: -config.file=/etc/promtail/config.yml
-    depends_on:
-      - loki
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8888:8080"
     networks:
       - app_network
 
@@ -117,9 +104,9 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=root
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
       - prometheus
-      - loki
     networks:
       - app_network
 
@@ -130,5 +117,4 @@ networks:
 volumes:
   db_data:
   prometheus_data:
-  loki_data:
   grafana_data:
