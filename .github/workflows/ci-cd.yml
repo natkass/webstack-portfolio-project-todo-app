@@ -71,9 +71,12 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           mkdir -p ~/project
-          if [ ! -d "~/project/webstack-portfolio-project-todo-app" ]; then
+          if [ ! -d "~/project/webstack-portfolio-project-todo-app/.git" ]; then
+            rm -rf ~/project/webstack-portfolio-project-todo-app
             git clone https://github.com/${{ github.repository }}.git ~/project/webstack-portfolio-project-todo-app
           fi
           cd ~/project/webstack-portfolio-project-todo-app
           git pull origin main
           docker compose up -d --build
+
+        
