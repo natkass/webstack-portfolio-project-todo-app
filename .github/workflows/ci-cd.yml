@@ -47,7 +47,7 @@ jobs:
       with:
         context: ./backend
         file: ./backend/Dockerfile
-        push: false # Set to true to push to a registry in production
+        push: false
         tags: backend:latest
 
     - name: Build Frontend Docker Image
@@ -55,7 +55,7 @@ jobs:
       with:
         context: ./frontend
         file: ./frontend/Dockerfile
-        push: false # Set to true to push to a registry in production
+        push: false
         tags: frontend:latest
         
   deploy:
@@ -70,6 +70,10 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd ~/webstack-portfolio-project-todo-app
+          mkdir -p ~/project
+          if [ ! -d "~/project/webstack-portfolio-project-todo-app" ]; then
+            git clone https://github.com/${{ github.repository }}.git ~/project/webstack-portfolio-project-todo-app
+          fi
+          cd ~/project/webstack-portfolio-project-todo-app
           git pull origin main
           docker compose up -d --build
