@@ -4,3 +4,5 @@ dist/
 
 
 .env
+/ansible/inventory.ini
+/Deployment.md
