@@ -4,27 +4,27 @@ import './login.css'
 import { resumeSession } from "./util";
 
 interface LoginFormProps {
-  axios: AxiosInstance
+	axios: AxiosInstance
 }
 
 const Login: React.FC<LoginFormProps> = ({ axios }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [response, setResponse] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [response, setResponse] = useState("");
 	const [loading, setLoading] = useState(true);
 
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
+	const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setUsername(event.target.value);
+	};
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(event.target.value);
+	};
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    loginAction(username, password);
-  };
+	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		loginAction(username, password);
+	};
 
 	const loginAction = async (username: string, password: string) => {
 		if (username === "" || password === "") return
@@ -40,7 +40,7 @@ const Login: React.FC<LoginFormProps> = ({ axios }) => {
 			} else {
 				setResponse(result.data.message)
 			}
-		} catch(err: any) {
+		} catch (err: any) {
 			setResponse('something went wrong')
 			console.error(err)
 		}
@@ -56,33 +56,34 @@ const Login: React.FC<LoginFormProps> = ({ axios }) => {
 
 		// resume session
 		resumeSession(axios)
-		.then(success => {
-			if (success) {
-				window.location.href = '/home'
-			} else {
-				localStorage.clear()
+			.then(success => {
+				if (success) {
+					window.location.href = '/home'
+				} else {
+					localStorage.clear()
+					setLoading(false)
+				}
+			})
+			.catch(err => {
 				setLoading(false)
-			}
-		})
-		.catch(err => {
-			setLoading(false)
-		})
-	},[])
+			})
+	}, [])
 
-  return loading ? (
+	return loading ? (
 		<div>
 			Loading...
 		</div>
 	) : (
-    <form className="form" onSubmit={handleSubmit}>
+		<form className="form" onSubmit={handleSubmit}>
+			<h1 style={{ textAlign: 'center', fontStyle: 'italic' }}>my web-stack todo-app</h1>
 			<h3>Login</h3>
 			<p className="response">{response}</p>
 			<input placeholder="Username" type="text" value={username} onChange={handleUsernameChange} />
 			<input placeholder="Password" type="password" value={password} onChange={handlePasswordChange} />
-      <button type="submit">Login</button>
+			<button type="submit">Login</button>
 			<a href="/signup">Create an account</a>
-    </form>
-  );
+		</form>
+	);
 };
 
 export default Login;
