@@ -76,4 +76,10 @@ jobs:
           fi
           cd ~/project/webstack-portfolio-project-todo-app
           git pull origin main
+          
+          # Automatically sync .env from GitHub Secrets if DOTENV is provided
+          if [ ! -z "${{ secrets.DOTENV }}" ]; then
+            echo "${{ secrets.DOTENV }}" > .env
+          fi
+          
           docker compose up -d --build
