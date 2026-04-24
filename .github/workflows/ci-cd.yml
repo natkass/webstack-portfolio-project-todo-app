@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main, master ]
 
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -95,4 +91,8 @@ jobs:
           
           export GITHUB_REPOSITORY=${{ github.repository }}
           docker compose pull
-          docker compose up -d
+          docker compose up -d --remove-orphans
+
+          # Safe cleanup: removes only dangling images and unused networks
+          docker image prune -f
+          docker network prune -f

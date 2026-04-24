@@ -12,20 +12,12 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - app_network
-    deploy:
-      resources:
-        limits:
-          memory: 256M
     command: --innodb-buffer-pool-size=64M
 
   backend:
     image: ghcr.io/${GITHUB_REPOSITORY}/backend:latest
     container_name: backend
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 256M
     environment:
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
@@ -41,10 +33,6 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY}/frontend:latest
     container_name: frontend
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 128M
     networks:
       - app_network
 
@@ -52,10 +40,6 @@ services:
     image: nginx:alpine
     container_name: nginx
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 64M
     ports:
       - "8080:80"
     volumes:
@@ -70,10 +54,6 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 256M
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -113,10 +93,6 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 256M
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
