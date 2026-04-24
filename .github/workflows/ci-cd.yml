@@ -41,24 +41,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build Backend Docker Image
+    - name: Build and Push Backend Image
       uses: docker/build-push-action@v4
       with:
         context: ./backend
         file: ./backend/Dockerfile
-        push: false
-        tags: backend:latest
+        push: true
+        tags: ghcr.io/${{ github.repository }}/backend:latest
 
-    - name: Build Frontend Docker Image
+    - name: Build and Push Frontend Image
       uses: docker/build-push-action@v4
       with:
         context: ./frontend
         file: ./frontend/Dockerfile
-        push: false
-        tags: frontend:latest
+        push: true
+        tags: ghcr.io/${{ github.repository }}/frontend:latest
         
   deploy:
     needs: docker-build
@@ -85,4 +89,6 @@ jobs:
             echo "${{ secrets.DOTENV }}" > .env
           fi
           
-          docker compose up -d --build
+          export GITHUB_REPOSITORY=${{ github.repository }}
+          docker compose pull
+          docker compose up -d
