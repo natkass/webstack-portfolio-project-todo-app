@@ -19,17 +19,19 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install and build Backend
+    - name: Install, build and test Backend
       working-directory: ./backend
       run: |
         npm install
         npm run build
+        npm test
 
-    - name: Install and build Frontend
+    - name: Install, build and test Frontend
       working-directory: ./frontend
       run: |
         npm install
         npm run build
+        npm test
 
   docker-build:
     needs: build-and-test
@@ -84,5 +86,3 @@ jobs:
           fi
           
           docker compose up -d --build
-
-        
