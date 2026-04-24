@@ -74,7 +74,7 @@ const Login: React.FC<LoginFormProps> = ({ axios }) => {
 			Loading...
 		</div>
 	) : (
-		<form className="form" style={{ backgroundColor: 'white' }} onSubmit={handleSubmit}>
+		<form className="form" style={{ backgroundColor: 'black' }} onSubmit={handleSubmit}>
 			{/* <h1 style={{ textAlign: 'center', fontStyle: 'italic' }}>my web-stack todo-app</h1> */}
 			<h3>Login</h3>
 			<p className="response">{response}</p>
